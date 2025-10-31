@@ -20,10 +20,15 @@ import edu.eci.arsw.myrestaurant.RestapidemoApplication;
 import edu.eci.arsw.myrestaurant.model.Order;
 import edu.eci.arsw.myrestaurant.model.ProductType;
 import edu.eci.arsw.myrestaurant.model.RestaurantProduct;
+import edu.eci.arsw.myrestaurant.services.OrderServicesException;
 import edu.eci.arsw.myrestaurant.services.RestaurantOrderServicesStub;
+
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,6 +48,19 @@ public class OrdersAPIController {
     @Autowired
     public OrdersAPIController(RestaurantOrderServicesStub restaurantOrderServicesStub){
         this.restaurantOrderServicesStub = restaurantOrderServicesStub;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllOrders(){
+        try {
+            HashSet<Order> orders = restaurantOrderServicesStub.getAllOrders();
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        }
+        catch (OrderServicesException ex) {
+            Logger.getLogger(OrdersAPIController.class.getName()).log(Level.SEVERE, "No hay ordenes",ex);
+            return new ResponseEntity<>(ex, HttpStatus.NO_CONTENT);
+        }
+
     }
 
 

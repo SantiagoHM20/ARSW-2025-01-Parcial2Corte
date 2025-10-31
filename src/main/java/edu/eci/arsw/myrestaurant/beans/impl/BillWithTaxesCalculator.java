@@ -1,5 +1,6 @@
 package edu.eci.arsw.myrestaurant.beans.impl;
 
+import edu.eci.arsw.myrestaurant.beans.impl.colombia.StandardTaxesCalculator;
 import edu.eci.arsw.myrestaurant.model.Order;
 import edu.eci.arsw.myrestaurant.model.RestaurantProduct;
 import edu.eci.arsw.myrestaurant.beans.BillCalculator;
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 public class BillWithTaxesCalculator implements BillCalculator {
 
-
-    TaxesCalculator taxescalc;
+    @Autowired
+    StandardTaxesCalculator taxescalc;
 
     @Override
     public int calculateBill(Order o, Map<String, RestaurantProduct> productsMap) {

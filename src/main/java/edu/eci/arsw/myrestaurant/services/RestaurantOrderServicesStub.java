@@ -5,12 +5,18 @@ import edu.eci.arsw.myrestaurant.model.Order;
 import edu.eci.arsw.myrestaurant.model.RestaurantProduct;
 import edu.eci.arsw.myrestaurant.beans.BillCalculator;
 import edu.eci.arsw.myrestaurant.model.ProductType;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.Collections.addAll;
+import static java.util.EnumSet.copyOf;
 
 @Service
 public class RestaurantOrderServicesStub implements RestaurantOrderServices {
@@ -24,6 +30,19 @@ public class RestaurantOrderServicesStub implements RestaurantOrderServices {
     public void setBillCalculator(BillCalculator calc) {
         this.calc = calc;
     }
+
+    @Override
+    public HashSet<Order> getAllOrders()throws OrderServicesException{
+        HashSet<Order> orders = new HashSet<>();
+        for(Order order : tableOrders.values()){
+            orders.add(order);
+        }
+        if(orders.isEmpty()){
+            throw new OrderServicesException("No hay ordenes");
+        }
+        return orders;
+    }
+
 
     @Override
     public Order getTableOrder(int tableNumber) {
